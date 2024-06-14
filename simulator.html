@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta name="author" content="Pranav Sirodaria" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulator</title>
+    <link rel="icon" type="image/x-icon" href="img/adjustments.svg" />
+    <!-- LINK JAVASCRIPT -->
+    <script type="text/javascript" src="JS/FCFS.js"></script>
+    <script type="text/javascript" src="JS/SSTF.js"></script>
+    <script type="text/javascript" src="JS/LOOK.js"></script>
+    <script type="text/javascript" src="JS/SCAN.js"></script>
+    <script type="text/javascript" src="JS/CLOOK.js"></script>
+    <script type="text/javascript" src="JS/CSCAN.js"></script>
+    <script type="text/javascript" src="JS/FIFO.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet" />
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script type="text/javascript" src="JS/renderchart.js"></script>
+    <!-- LINK JAVASCRIPT -->
+    <!-- LINK CSS -->
+    <link href="CSS/simulator.css?" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="CSS/style.css" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  </head>
+
+  <body>
+    <section class="sub-header">
+      <nav>
+        <a style="color: black">SIMULATOR</a>
+        <div class="nav-links" id="navLinks">
+          <i class="fas fa-window-close" onclick="hideMenu()"></i>
+          <ul>
+            <!-- <li><a href="blog.html">BLOG</a></li> -->
+            <li><a href="simulator.html" style="color: black">Simulasi</a></li>
+            <li><a href="about.html" style="color: black">Tentang</a></li>
+          </ul>
+        </div>
+        <i class="fas fa-bars" onclick="showMenu()"></i>
+      </nav>
+    </section>
+    <div class="container full-height-grow">
+      <section class="simulator-section flex-direction">
+        <div class="disk-scheduling">
+          <div class="disk-scheduling-heading">PENJADWALAN DISK</div>
+          <div class="form">
+            <form onsubmit="return gettrackno();" id="drop">
+              <label>Posisi Track</label><br />
+              <input type="text" class="current-track" id="css" placeholder="Masukan Posisi Track" /><br />
+              <label>Nomor Track</label><br />
+              <input type="text" class="track-sequence" placeholder="Masukan Nomor Track" /><br />
+              <label>Algoritma</label><br />
+              <select class="algorithm-dropdown" id="algo" onchange="disableDropdown()">
+                <option value="FIFO">FIFO</option>
+                <option value="SSTF">SSTF</option>
+                <option value="SCAN">SCAN</option>
+                <option value="CSCAN">CSCAN</option>
+                <!-- Tambahkan opsi FIFO -->
+              </select>
+              <br />
+              <label>Arah</label><br />
+              <select class="direction-dropdown" id="dir">
+                <option value="left">KIRI</option>
+                <option value="right">KANAN</option>
+              </select>
+              <br /><br />
+              <button type="submit" value="Simulasi" class="btn" id="addbtn">Simulasi</button>
+            </form>
+          </div>
+        </div>
+        <div class="output">
+          <div class="output-heading">HASIL</div>
+          <div class="results">
+            <div class="track-number">Nomor Track :</div>
+            <div class="current">Posisi Track :</div>
+            <div class="algo">Algoritma:</div>
+            <div class="order">Urutan Eksekusi:</div>
+            <div class="time">Total Waktu Pencarian:</div>
+            <div>Grafik:</div>
+            <div id="chartContainer" style="width: auto; height: 200px; margin-top: 50px"></div>
+          </div>
+        </div>
+        <div>
+          <script>
+            function disableDropdown() {
+              if (drop.algo.options[4].selected || drop.algo.options[5].selected) {
+                drop.dir.disabled = true;
+              } else {
+                drop.dir.disabled = false;
+              }
+            }
+            function gettrackno() {
+              var trackno = document.querySelector(".track-sequence").value;
+              var ctrack = document.querySelector(".current-track").value;
+              var alg = document.querySelector(".algorithm-dropdown").value;
+
+              document.querySelector(".track-number").innerHTML = "Nomor Track : " + trackno;
+
+              document.querySelector(".current").innerHTML = "Posisi Track Sekarang : " + ctrack;
+
+              document.querySelector(".algo").innerHTML = "Algoritma: " + alg;
+
+              if (alg === "FIFO") {
+                fifo();
+              } else if (alg === "SSTF") {
+                sstf();
+              } else if (alg === "SCAN") {
+                scan();
+              } else if (alg === "CSCAN") {
+                cscan();
+              }
+
+              return false;
+            }
+
+            var subButton = document.getElementById("addbtn");
+            subButton.addEventListener("click", gettrackno, false);
+          </script>
+          <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
